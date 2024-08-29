@@ -439,7 +439,8 @@ async def ssh_client_task():
                 to_dir = parts[1]
             await send_stderr(f"> Synchronising {from_dir}...\n")
             rc, stderr, stdout = await execute('rsync', '-avh', '--inplace',
-                '--partial', '--delete', from_dir, args.host + ':' + to_dir)
+                '--partial', '--delete', '--size-only',
+                from_dir, args.host + ':' + to_dir)
             if rc != 0:
                 await send_stderr(f"WARNING: {from_dir} sync failed:\n{stderr}\n")
 
