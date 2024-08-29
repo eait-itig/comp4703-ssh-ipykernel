@@ -577,7 +577,7 @@ async def ssh_client_task():
 
 
 async def send_stderr(msg):
-    log.info("stderr: %s", strip(msg))
+    log.info("stderr: %s", msg.strip())
     content = {'name': 'stderr', 'text': msg}
     await send(streams['iopub'], 'stream', content,
         parent_header = last_header)
