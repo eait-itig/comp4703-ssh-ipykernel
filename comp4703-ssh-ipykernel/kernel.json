@@ -1,0 +1,22 @@
+{
+  "argv": [
+    "/usr/bin/python3.12",
+    "-m",
+    "comp4703_ssh_ipykernel",
+    "--host",
+    "gpu",
+    "--rsync",
+    "/conda/",
+    "--python",
+    "/conda/bin/python",
+    "-f",
+    "{connection_file}"
+  ],
+  "env": {
+    "SSH_AUTH_SOCK": "/run/zone-auth-agent.sock",
+    "LOG_LEVEL": "INFO"
+  },
+  "display_name": "Python 3.8 (GPU, conda)",
+  "language": "python",
+  "interrupt_mode": "message"
+}
