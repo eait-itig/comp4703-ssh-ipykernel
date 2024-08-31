@@ -233,7 +233,9 @@ async def shell_handler(wire_msg):
         content = {'execution_state': 'busy'}
         await send(streams['iopub'], 'status', content,
             parent_header = msg['header'])
-        content = {'execution_count': 1, 'code': msg['content']['code']}
+        content = {'execution_count': 1}
+        if 'code' in msg['content']:
+            content['code'] = msg['content']['code']
         await send(streams['iopub'], 'execute_input', content,
             parent_header = msg['header'])
 
@@ -327,6 +329,8 @@ else:
         'stdin_port'        : 0,
         'transport'         : 'tcp'
     }
+
+workdir = os.path.realpath(os.getcwd())
 
 connection = config["transport"] + "://" + config["ip"]
 secure_key = str_to_bytes(config["key"])
@@ -518,6 +522,9 @@ async def ssh_client_task():
             stderr = subprocess.PIPE)
 
         if pid is None:
+            proc.stdin.write(f"cd {workdir}\n".encode('utf-8'))
+            proc.stdin.write(f"export PATH='/conda/bin:{os.environ['PATH']}'\n".encode('utf-8'))
+            proc.stdin.write(f"export HOME='{os.environ['HOME']}'\n".encode('utf-8'))
             proc.stdin.write(
                 f"nohup {args.python} -m ipykernel_launcher -f {fname}\n".encode('utf-8'))
         else:
